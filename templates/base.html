@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            background-color: #007bff;
+            color: #fff;
+            padding: 20px 0;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2rem;
+        }
+
+        nav {
+            background-color: #333;
+            padding: 10px;
+        }
+
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        nav li {
+            margin: 0;
+            padding: 0;
+        }
+
+        nav li a {
+            text-decoration: none;
+            color: #fff;
+            padding: 10px 15px;
+            display: block;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        nav li a:hover {
+            background-color: #555;
+        }
+
+        .active > a {
+            background-color: #007bff;
+            font-weight: bold;
+        }
+
+        ul ul {
+            display: none;
+            padding-left: 20px;
+        }
+
+        ul li.active > ul {
+            display: block;
+        }
+
+        .menu-toggle {
+            cursor: pointer;
+            display: none;
+            font-size: 1.2rem;
+            color: #fff;
+            padding: 10px;
+            background-color: #007bff;
+            border: none;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        .menu-toggle:hover {
+            background-color: #0056b3;
+        }
+
+        .submenu-toggle {
+            cursor: pointer;
+            font-size: 1.2rem;
+            color: #fff;
+            padding: 0 10px;
+            background-color: #007bff;
+            border: none;
+            border-radius: 4px;
+            margin-right: 10px;
+        }
+
+        .submenu-toggle:hover {
+            background-color: #0056b3;
+        }
+
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+
+            nav {
+                display: none;
+            }
+
+            nav.active {
+                display: block;
+            }
+
+            nav ul {
+                display: block;
+                padding-left: 0;
+            }
+
+            nav ul ul {
+                display: none;
+                padding-left: 20px;
+            }
+
+            nav li.active > ul {
+                display: block;
+            }
+        }
+
+        main {
+            padding: 20px;
+            background-color: #fff;
+            margin: 20px auto;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            max-width: 1200px;
+        }
+
+        footer {
+            background-color: #007bff;
+            color: #fff;
+            text-align: center;
+            padding: 15px;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        footer p {
+            margin: 0;
+            font-size: 0.875rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Меню</h1>
+    </header>
+    <div style="text-align: center">
+      <nav>
+          <button class="menu-toggle">☰ Menu</button>
+          {% load menu_tags %}
+          {% draw_menu 'main_menu' %}
+      </nav>
+    </div>
+    <footer>
+        <p>© 2024 Ваш сайт. Все права защищены.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const menuToggle = document.querySelector('.menu-toggle');
+            const nav = document.querySelector('nav');
+
+            menuToggle.addEventListener('click', function () {
+                nav.classList.toggle('active');
+            });
+
+            document.querySelectorAll('nav li').forEach(function (item) {
+                const link = item.querySelector('a');
+                const hasSubMenu = item.querySelector('ul');
+
+                if (hasSubMenu) {
+                    const toggleButton = document.createElement('button');
+                    toggleButton.className = 'submenu-toggle';
+                    toggleButton.textContent = '▶';
+                    item.insertBefore(toggleButton, link);
+
+                    toggleButton.addEventListener('click', function (event) {
+                        event.preventDefault();
+                        item.classList.toggle('active');
+                        toggleButton.textContent = item.classList.contains('active') ? '▼' : '▶';
+                    });
+                }
+
+                item.addEventListener('click', function (event) {
+                    if (!hasSubMenu) {
+                        window.location.href = link.href;
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
