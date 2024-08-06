@@ -31,7 +31,6 @@ UpTrader is a Python Django application designed to provide a robust and scalabl
    
 2. **Install Python dependencies:**
    ```sh
-   pip install poetry
    poetry install --no-root
    ```
 
